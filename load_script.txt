@@ -1,0 +1,65 @@
+// Clears any existing graph
+MATCH (n)
+DETACH DELETE n;
+
+// Create constraints
+CREATE CONSTRAINT FOR (player:Player) REQUIRE player.PlayerID IS UNIQUE;
+CREATE CONSTRAINT FOR (club:Club) REQUIRE club.ClubID IS UNIQUE;
+CREATE CONSTRAINT FOR (club:Club) REQUIRE club.Clubname IS UNIQUE;
+CREATE CONSTRAINT FOR (country:Country) REQUIRE country.CountryID IS UNIQUE;
+CREATE CONSTRAINT FOR (country:Country) REQUIRE country.Countryname IS UNIQUE;
+
+// Players node
+LOAD CSV WITH HEADERS FROM "file:///players.csv" AS row
+CREATE (player:Player {
+    PlayerID: row.PlayerID,
+    Name: row.Name,
+    Position: row.Position,
+    Number:toInteger(row.Number),
+    DOB:date(row.DOB),
+    Age: toInteger(row.Age),
+    Height: toInteger(row.`Height (cm)`)
+});
+
+// Country node
+LOAD CSV WITH HEADERS FROM "file:///countries.csv" AS row
+CREATE (country:Country {
+    Countryname:row.Country,
+    CountryID:row.CountryID
+});
+
+// Club node
+LOAD CSV WITH HEADERS FROM "file:///clubs.csv" AS row
+CREATE (club:Club {
+    Clubname:row.Name,
+    ClubID:row.ClubID
+});
+
+
+
+// Creating the "plays for" relationship between a player and club
+
+LOAD CSV WITH HEADERS FROM "file:///rel_plays_for.csv" AS row
+MATCH (player:Player {PlayerID: row.PlayerID}),
+      (club:Club {ClubID: row.ClubID})
+CREATE (player)-[:PLAYS_FOR {
+    PlaysInHomeCountry: row.`Plays in home country?` = 'True'
+}]->(club);
+
+
+// Creating the "represents" relationship between a player and a country
+LOAD CSV WITH HEADERS FROM "file:///rel_represents.csv" AS row
+MATCH (player:Player {PlayerID: row.PlayerID}),
+      (country:Country {CountryID: row.CountryID})
+CREATE (player)-[:REPRESENTS {
+    Caps: toInteger(row.Caps),
+    InternationalGoals: toInteger(row.`International goals`),
+    PlayedForNationalTeam: row.`Played For National Team` = 'True'
+}]->(country);
+
+
+// Creating the "located in" relationship between a club and a country
+LOAD CSV WITH HEADERS FROM 'file:///rel_located_in.csv' AS row
+MATCH (club:Club{ClubID: row.ClubID}), 
+      (country:Country{CountryID:row.CountryID})
+CREATE (club)-[:LOCATED_IN]->(country);

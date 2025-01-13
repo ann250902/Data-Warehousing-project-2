@@ -1,0 +1,86 @@
+// Q1 What is the jersey number of the player with a player id of 290903?
+MATCH (player:Player) 
+WHERE (player.PlayerID = "290903")
+RETURN player.Number AS `Jersy Number`;
+
+
+// Q2 Which clubs are based in Spain?
+MATCH (club:Club), (country:Country {Countryname: "Spain"})
+WHERE (club) -[:LOCATED_IN]-> (country)
+RETURN distinct club.Clubname;
+
+// Q3 How old is Lionel Messi?
+MATCH (player:Player {Name: "Lionel Messi"}) 
+RETURN player.Age;
+
+// Q4 In which country is the club that Lionel Messi plays for?
+MATCH (player:Player) -[:PLAYS_FOR]-> (club:Club) -[:LOCATED_IN]-> (country:Country)
+WHERE (player.Name = "Lionel Messi")
+RETURN country.CountryName;
+
+//Q5 Find a club that has players from Brazil.
+MATCH (player:Player)-[:REPRESENTS]->(country:Country {Countryname: "Brazil"}),
+      (player)-[:PLAYS_FOR]->(club:Club)
+RETURN club.Clubname AS ClubName, COUNT(player) AS PlayerCount
+ORDER BY PlayerCount DESC;
+
+// Q6 Find all players play at FC Barcelona, returning in ascending orders of age.
+MATCH (player:Player)-[:PLAYS_FOR]->(club:Club {Clubname: "FC Barcelona"})
+RETURN player.Name, player.Age
+ORDER BY player.Age ASC;
+
+
+// Q7 Find all defender players the national team of Spain, returning in descending order of caps.
+MATCH (player:Player {Position: "Defender"})-[:REPRESENTS]->(country:Country {Countryname: "Spain"})
+RETURN player.Name AS PlayerName
+ORDER BY player.Caps DESC;
+
+// Q8 Find all players born in 1990 and in the national team of Japan, returning in descending order of caps.
+MATCH (player:Player)-[:REPRESENTS]->(country:Country {Countryname: "Japan"})
+WHERE date(player.DOB).year = 1990
+RETURN player.Name AS PlayerName
+ORDER BY player.Caps DESC;
+
+// Q9 Find the players that belongs to the same club in national team of Portugal, returning in descending order of international goals.
+MATCH (player:Player)-[represents:REPRESENTS]->(country:Country {Countryname: "Portugal"}) 
+MATCH (player)-[:PLAYS_FOR]->(club:Club)
+WITH player, club, represents
+ORDER BY represents.InternationalGoals DESC
+RETURN player.Name AS PlayerName, club.Clubname AS ClubName, represents.InternationalGoals AS InternationalGoals;
+
+// Q10 Count how many players are born in 1989
+MATCH (player:Player) -[:BORN_IN]-> (year:Year {Year: "1991"})
+RETURN count(player.Name) AS `Number of Players Born in 1991`;
+
+
+// Q11 Which age has the highest participation in the 2014 FIFA World Cup?
+MATCH (player:Player)
+WITH player.Age AS Age, COUNT(player) AS NumberOfPlayers
+RETURN Age, NumberOfPlayers
+ORDER BY NumberOfPlayers DESC
+LIMIT 1;
+
+// Q12 Find the path with a length of 2 or 3 between Manchester United FC and Manchester City FC.
+MATCH path = (club1:Club {Clubname: "Manchester United FC"})-[*2..3]-(club2:Club {Clubname: "Manchester City FC"})
+RETURN path;
+
+// Q13 Find the top 5 countries with players who have the highest average number of international goals. Return the countries and their average international goals in descending order.
+MATCH (player:Player)-[represents:REPRESENTS]->(country:Country)
+WITH country.Countryname AS Country, AVG(represents.InternationalGoals) AS AverageGoals
+RETURN Country, AverageGoals
+ORDER BY AverageGoals DESC
+LIMIT 5;
+
+// Q14 Find the top 5 countries with the most players who play for their home country's club
+MATCH (player:Player)-[playsFor:PLAYS_FOR]->(club:Club)-[:LOCATED_IN]->(country:Country)
+WHERE playsFor.PlaysInHomeCountry = true
+  AND (player)-[:REPRESENTS]->(country)
+RETURN country.Countryname AS CountryName, COUNT(player) AS NumberOfPlayers
+ORDER BY NumberOfPlayers DESC
+LIMIT 5;
+
+
+// Q15 Find players who have played for the national team of Italy and their clubs
+MATCH (player:Player)-[represents:REPRESENTS {PlayedForNationalTeam: true}]->(country:Country {Countryname: "Italy"}) 
+MATCH (player)-[:PLAYS_FOR]->(club:Club)
+RETURN player.Name AS PlayerName, club.Clubname AS ClubName, country.Countryname AS CountryName;
