@@ -47,7 +47,7 @@ The dataset includes detailed information about players who participated in the 
   - Query screenshots and results.
   - Comparison of graph and relational databases.
   - Application of Graph Data Science.
-- **`queries_results/`**: Screenshots of executed queries and their outputs.
+
 
 ## How to Run
 1. **Setup Neo4j**:
