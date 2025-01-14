@@ -38,8 +38,8 @@ The dataset includes detailed information about players who participated in the 
 ## Project Files
 - **`cypher_scripts.txt`**: Contains all Cypher scripts for graph creation and querying.
 - **CSV Files**:
-  - `original/`: Unfiltered dataset in CSV format.
-  - `filtered/`: Optimized dataset with reduced records for performance.
+  - `data_raw/`: Unfiltered dataset in CSV format.
+  - `data_processed/`: Optimized dataset with reduced records for performance.
 - **`design.png`**: Screenshot of the graph schema designed in the Arrows App.
 - **`project_report.pdf`**: Comprehensive report including:
   - Graph design rationale.
