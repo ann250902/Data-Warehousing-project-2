@@ -55,10 +55,10 @@ The dataset includes detailed information about players who participated in the 
    - Create a new project and database.
 
 2. **Import Data**:
-   - Use the Cypher scripts in `cypher_scripts.txt` to create nodes and relationships by importing CSV files.
+   - Use the Cypher scripts in `load_script.txt` to create nodes and relationships by importing CSV files.
 
 3. **Run Queries**:
-   - Execute the provided Cypher queries to analyze the data and answer the project questions.
+   - Execute the `cypher_scripts.txt` file to analyze the data and answer the project questions.
 
 ## Key Insights
 - Demonstrates how graph databases simplify complex relationships and queries.
