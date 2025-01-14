@@ -36,12 +36,12 @@ The dataset includes detailed information about players who participated in the 
 - **Cypher**: Query language for interacting with the graph database.
 
 ## Project Files
-- **`cypher_scripts.txt`**: Contains all Cypher scripts for graph creation and querying.
+- **`queries_script.txt`**: Contains all Cypher scripts for graph creation and querying.
 - **CSV Files**:
   - `data_raw/`: Unfiltered dataset in CSV format.
   - `data_processed/`: Optimized dataset with reduced records for performance.
 - **`design.png`**: Screenshot of the graph schema designed in the Arrows App.
-- **`project_report.pdf`**: Comprehensive report including:
+- **`DW_project_2.pdf`**: Comprehensive report including:
   - Graph design rationale.
   - ETL process description.
   - Query screenshots and results.
@@ -58,7 +58,7 @@ The dataset includes detailed information about players who participated in the 
    - Use the Cypher scripts in `load_script.txt` to create nodes and relationships by importing CSV files.
 
 3. **Run Queries**:
-   - Execute the `cypher_scripts.txt` file to analyze the data and answer the project questions.
+   - Execute the `queries_script.txt` file to analyze the data and answer the project questions.
 
 ## Key Insights
 - Demonstrates how graph databases simplify complex relationships and queries.
